@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-DEEPSEEK_API_KEY = "your_deepseek_api_key"
+DEEPSEEK_API_KEY = "sk-334f3dfaa265426e855827017aca5556"
 
 @app.route('/analyze_vehicle', methods=['POST'])
 def analyze_vehicle():

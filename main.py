@@ -1,18 +1,37 @@
 from flask import Flask, request, jsonify
+import requests
 
 app = Flask(__name__)
 
-@app.route('/obd-data', methods=['POST'])
-def receive_obd_data():
-    data = request.json
-    print("📥 البيانات المستلمة من Flutter:", data)
-    
-    # تقدر هنا تخزن البيانات أو تعالجها أو ترسلها لفirebase
-    return jsonify({"message": "✅ تم استلام البيانات بنجاح"}), 200
+DEEPSEEK_API_KEY = "your_deepseek_api_key"
 
-@app.route('/', methods=['GET'])
-def home():
-    return "🚀 API شغالة تمام"
+@app.route('/analyze_vehicle', methods=['POST'])
+def analyze_vehicle():
+    data = request.json
+    prompt = generate_prompt(data)
+
+    response = requests.post(
+        "https://api.deepseek.com/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "model": "deepseek-chat",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.7
+        }
+    )
+
+    result = response.json()["choices"][0]["message"]["content"]
+    return jsonify({"result": result})
+
+def generate_prompt(data):
+    prompt = "You are an AI vehicle diagnostic assistant. Here are the sensor readings:\n"
+    for key, value in data.items():
+        prompt += f"- {key}: {value}\n"
+    prompt += "\nGenerate a report with:\n1. Explanation\n2. Detected Issues\n3. Fix Suggestions"
+    return prompt
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)

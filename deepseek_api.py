@@ -46,8 +46,15 @@ def analyze_vehicle():
 
 
 def generate_prompt(data):
-    prompt = "You are an AI vehicle diagnostic assistant. Here are the sensor readings:\n"
-    for key, value in data.items():
+    prompt = "You are an automotive assistant.\n" \
+         "Summarize the following vehicle sensor data into 3 clear, user-friendly sections:\n" \
+         "1. 🚨 Major issues (e.g., what's wrong)\n" \
+         "2. 📘 Simple explanation (what it means in basic terms)\n" \
+         "3. 🛠 Suggested actions (what the driver should do)\n\n" \
+         "Avoid technical jargon. Be short and clear.\n\n"
+
+for key, value in data.items():
+    prompt += f"- {key}: {value}\n"
         prompt += f"- {key}: {value}\n"
     prompt += "\nGenerate a report with:\n1. Explanation\n2. Detected Issues\n3. Fix Suggestions"
     return prompt

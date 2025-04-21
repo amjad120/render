@@ -19,6 +19,8 @@ def analyze_vehicle():
         "2. 📘 Simple explanation (easy to understand)\n"
         "3. 🛠 Suggested actions (clear & brief)\n\n"
         "Avoid technical terms and ignore missing values marked with '-'.\n\n"
+        "This is a one-time data analysis only. Do not ask the user any questions or offer to continue the conversation.\n"
+        "Respond with a standalone report only.\n\n"
     )
 
     for key, value in data.items():
